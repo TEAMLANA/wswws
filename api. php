@@ -1,0 +1,651 @@
+<?php 
+
+ob_start();
+
+$API_KEY = '420178121:AAHDLF0E0c_F9dmBp5d0bKaj_JyKJ7xY3yc';
+define('API_KEY',$API_KEY);
+function bot($method,$datas=[]){
+    $url = "https://api.telegram.org/bot".API_KEY."/".$method;
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$url);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+    curl_setopt($ch,CURLOPT_POSTFIELDS,$datas);
+    $res = curl_exec($ch);
+    if(curl_error($ch)){
+        var_dump(curl_error($ch));
+    }else{
+        return json_decode($res);
+    }
+}
+$update = json_decode(file_get_contents('php://input'));
+$message = $update->message;
+$text = $message->text;
+$chat_id = $message->chat->id;
+$id = $message->from->id;
+$mid = $message->message_id;
+$admin = 369155273;
+$gn = $message->chat->title;
+$n = $message->new_chat_member;
+$l = $message->left_chat_member;
+$type = $update->message->chat->type;
+$get_fwd = file_get_contents('bebo/fwd.txt');
+$fwd = explode("\n", $get_fwd);
+$get_photo = file_get_contents('bebo/photo.txt');
+$photo = explode("\n", $get_photo);
+$get_sticker = file_get_contents('bebo/sticker.txt');
+$sticker = explode("\n", $get_sticker);
+$get_voice = file_get_contents('bebo/voice.txt');
+$voice = explode("\n", $get_voice);
+$get_audio = file_get_contents('bebo/audio.txt');
+$audio = explode("\n", $get_audio);
+$get_gif = file_get_contents('bebo/document.txt');
+$gif = explode("\n", $get_gif);
+$get_game = file_get_contents('bebo/game.txt');
+$game = explode("\n", $get_game);
+$get_contact = file_get_contents('bebo/contact.txt');
+$contact = explode("\n", $get_contact);
+$get_link = file_get_contents('bebo/link.txt');
+$link = explode("\n", $get_link);
+$get_hash = file_get_contents('bebo/hash.txt');
+$hash = explode("\n", $get_hash);
+$get_username = file_get_contents('bebo/username.txt');
+$username = explode("\n", $get_username);
+
+
+if($text == "/start"){
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"اهلا وسهلا بك عزيزي في بوت حماية الكروبات ❤️😊\n اسم المجموعة 〽️ : $gn\n    وظائف البوت هيا 💡\n 🌀 : حذف التوجيه ♻️ والروابط ⛔️ وملصقات 🖼 وصور 📸 والمتحركه 💾 واليوزرنيم والهاشتاك ⚔️\n كل ماا عليك هو اضافه البوت ⚜️ ورفعه ادمن  وسوف يتم تفعيل البوت تلقائيا",
+]);
+}
+
+
+if($n){
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"' آهہۧلاً وسہۧهہۧلآً  🙊💋 📝\n آسہۧم آلہمہۧجہمہۧوعہۧةة : $gn\n \n [تابعنا لمعرفة كل جديد 💌📤](https://t.me/joinchat/AAAAAEOsH7MIf7kAMLNisA)",
+'parse_mode'=>'Markdown'
+]);
+
+
+if($l){
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"آلہۧزآحہۧف هہۧذا غہۧآدر آلہۧكہروبہۧ  🐸🍆\n [تابعنا لمعرفة كل جديد 💌📤](https://t.me/joinchat/AAAAAEOsH7MIf7kAMLNisA)",
+'parse_mode'=>'Markdown'
+]);
+}
+
+$reply = $message->reply_to_message; 
+$reply_message = $reply->message_id; 
+
+if($reply && $text=="تثبيت" and $id == $admin){
+bot('pinChatMessage',[
+'chat_id'=>$chat_id,
+'message_id'=>$reply_message
+]);
+}
+
+if($text == "تثبيت" and $id == $admin){
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_Message is Pined_",
+'parse_mode'=>"markdown"
+]);
+}
+
+if($reply && $text=="الغاء تثبيت" and $id == $admin){
+bot('unpinChatMessage',[
+'chat_id'=>$chat_id,
+'message_id'=>$reply_message
+]);
+}
+
+if($text == "الغاء تثبيت" and $id == $admin){
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_Message has been uninstalled_",
+'parse_mode'=>"markdown"
+]);
+}
+
+$us = $message->from->username;
+
+
+if($text == "ايدي" and $id != $admin){
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"your id is : $id\n your username is : @$us\n You Are A member",
+]);
+}
+
+if($text == "ايدي" and $id == $admin){
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"your id is : $id\n your username is : @$us\n you are my dev",
+]);
+}
+
+
+if($text == "قفل التوجيه" and $id == $admin and !in_array($chat_id, $fwd)){
+file_put_contents('bebo/fwd.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل التوجيه بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل التوجيه" and $id == $admin and in_array($chat_id, $fwd)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"التوجيه بالفعل مقفول",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح التوجيه" and $id == $admin and in_array($chat_id, $fwd)){
+$open = file_get_contents("bebo/fwd.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/fwd.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح التوجيه بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح التوجيه" and $id == $admin and !in_array($chat_id, $fwd)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_التوجيه بالفعل مفتوح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($message->forward_from_chat->id and $id != $admin){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+if($text == "قفل الصور" and $id == $admin and !in_array($chat_id, $photo)){
+file_put_contents('bebo/photo.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل الصور بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل الصور" and $id == $admin and in_array($chat_id, $photo)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الصور بالفعل مقفولة",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الصور" and $id == $admin and in_array($chat_id, $photo)){
+$open = file_get_contents("bebo/photo.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/photo.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح الصور بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الصور" and $id == $admin and !in_array($chat_id, $photo)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_الصور مفتوحه بالفعل_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($message->photo and $id != $admin and in_array($chat_id, $photo)){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+if($text == "قفل الملصقات" and $id == $admin and !in_array($chat_id, $sticker)){
+file_put_contents('bebo/sticker.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل الملصقات بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل الملصقات" and $id == $admin and in_array($chat_id, $sticker)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الملصقات مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الملصقات" and $id == $admin and in_array($chat_id, $sticker)){
+$open = file_get_contents("bebo/sticker.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/sticker.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح الملصقات بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الملصقات" and $id == $admin and !in_array($chat_id, $sticker)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_الملصقات مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+
+if($message->sticker and $id != $admin and in_array($chat_id, $sticker)){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+
+
+if($text == "قفل البصمه" and $id == $admin and !in_array($chat_id, $voice)){
+file_put_contents('bebo/vioce.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل ابصمات بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل البصمه" and $id == $admin and in_array($chat_id, $voice)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"البصمات مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح البصمه" and $id == $admin and in_array($chat_id, $voice)){
+$open = file_get_contents("bebo/voice.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/voice.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح البصمات بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح البصمه" and $id == $admin and !in_array($chat_id, $voice)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"البصمات مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($message->voice and $id == $admin and in_array($chat_id, $voice)){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+if($text == "قفل الصوتيات" and $id == $admin and !in_array($chat_id, $audio)){
+file_put_contents('bebo/audio.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل الصوتيات بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل الصوتيات" and $id == $admin and in_array($chat_id, $audio)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الصوتيات مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الصوتيات" and $id == $admin and in_array($chat_id, $audio)){
+$open = file_get_contents("bebo/audio.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/audio.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح الصوتيات بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الصوتيات" and $id == $admin and !in_array($chat_id, $audio)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الصوتيات مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($message->audio and $id == $admin and in_array($chat_id, $audio)){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+if($text == "قفل المتحركه" and $id == $admin and !in_array($chat_id, $gif)){
+file_put_contents('bebo/document.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل الصور المتحركه بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل المتحركه" and $id == $admin and in_array($chat_id, $gif)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الصور المتحركه مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح المتحركه" and $id == $admin and in_array($chat_id, $gif)){
+$open = file_get_contents("bebo/document.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/document.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح الصور المتحركه بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح المتحركه" and $id == $admin and !in_array($chat_id, $gif)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الصور المتحركه مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($message->document and $id == $admin and in_array($chat_id, $document)){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+
+if($text == "قفل الالعاب" and $id == $admin and !in_array($chat_id, $game)){
+file_put_contents('bebo/game.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل الالعاب بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل الالعاب" and $id == $admin and in_array($chat_id, $game)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الالعاب مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الالعاب" and $id == $admin and in_array($chat_id, $game)){
+$open = file_get_contents("bebo/game.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/game.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح الصور الالعاب بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الالعاب" and $id == $admin and !in_array($chat_id, $game)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الالعاب  مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+}
+
+
+if($message->game and $id == $admin and in_array($chat_id, $game)){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+if($text == "قفل جهات الاتصال" and $id == $admin and !in_array($chat_id, $contact)){
+file_put_contents('bebo/contact.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل جهات الاتصال بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل جهات الاتصال" and $id == $admin and in_array($chat_id, $contact)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"جهات الاتصال مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح جهات الاتصال" and $id == $admin and in_array($chat_id, $contact)){
+$open = file_get_contents("bebo/contact.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/contact.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح  جهات الاتصال بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الالعاب" and $id == $admin and !in_array($chat_id, $contact)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"جهات الاتصال  مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($message->contact and $id == $admin and in_array($chat_id, $contact)){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+if($text == "قفل الروابط " and $id == $admin and !in_array($chat_id, $link)){
+file_put_contents('bebo/link.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل الروابط بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل الروابط " and $id == $admin and in_array($chat_id, $link)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الروابط  مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الروابط" and $id == $admin and in_array($chat_id, $link)){
+$open = file_get_contents("bebo/link.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/link.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح  الروابط بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الروابط" and $id == $admin and !in_array($chat_id, $contact)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الروابط  مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+}
+
+
+if(preg_match(('/^([Hh]ttp|[Hh]ttps|t.me)(.*)/',$text))
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+if($text == "قفل المعرف " and $id == $admin and !in_array($chat_id, $username)){
+file_put_contents('bebo/username.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل المعرفات بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل المعرف " and $id == $admin and in_array($chat_id, $username)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"المعرفات  مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح المعرف" and $id == $admin and in_array($chat_id, $username)){
+$open = file_get_contents("bebo/username.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/username.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح  المعرفات بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح المعرف" and $id == $admin and !in_array($chat_id, $username)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"المعرفات  مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if(preg_match(('/@/',$text))
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+if($text == "قفل الهاشتاك " and $id == $admin and !in_array($chat_id, $hash)){
+file_put_contents('bebo/hash.txt', "\n" . $chat_id, FILE_APPEND);
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم قفل الهاشتاك بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "قفل الهاشتاك " and $id == $admin and in_array($chat_id, $hash)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الهاشتاك  مقفولة بالفعل",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الهاشتاك" and $id == $admin and in_array($chat_id, $hash)){
+$open = file_get_contents("bebo/hash.txt");
+$str = str_replace($chat_id, '', $open);
+file_put_contents("bebo/hash.txt", $str)
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"_تم فتح  الهاشتاك بنجاح_",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if($text == "فتح الهاشتاك" and $id == $admin and !in_array($chat_id, $hash)){
+
+bot('sendMessage',[
+'chat_id'=>$chat_id,
+'text'=>"الهاشتاك  مفتوحه بالفعل _",
+'parse_mode'=>'Markdown'
+]);
+}
+
+if(preg_match(('/#/',$text)){
+bot('deleteMessage',[
+'chat_id'=>$chat_id, 
+'message_id'=>$mid
+]);
+}
+
+?>
